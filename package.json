@@ -20,8 +20,8 @@
     "@types/bun": "latest",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "bun-plugin-tailwind": "^0.1.2",
     "daisyui": "5.7.4",
-    "tailwindcss": "^4.3.3",
-    "bun-plugin-tailwind": "^0.1.2"
+    "tailwindcss": "^4.3.3"
   }
 }

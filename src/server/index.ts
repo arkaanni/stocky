@@ -4,12 +4,38 @@ import indexPrd from "../client/index_prd.html"
 import { init } from "../util"
 import { apiKey, maskedApiKey, serverStore } from "./store"
 import { GoogleGenAI, Type, type Part } from "@google/genai"
+import { negativeKeywords } from "../client/constants"
 
 await init()
 
 const index = process.env.NODE_ENV === "dev" ? indexDev : indexPrd
 
 const ai = new GoogleGenAI({ apiKey: serverStore.get(apiKey) })
+
+const convertEpsToJpg = async (file: File) => {
+  const tempEps = `./temp_${file.name}.eps`
+  const tempJpg = `./temp_${file.name}.jpg`
+  await Bun.write(tempEps, file)
+  // const epsFile = Bun.file(tempEps)
+  const gsArgs = [
+    'gswin64c.exe',
+    '-dNOPAUSE',
+    '-dBATCH',
+    '-dEPSCrop',             // <-- CRITICAL: Crops page boundaries to the EPS BoundingBox
+    '-dUseCropBox',
+    '-sDEVICE=pngalpha',       // Render PNG with transparency
+    '-r300',                    // 300 DPI resolution
+    `-sOutputFile=${tempJpg}`,
+    tempEps                 // Path to our temp EPS on disk
+  ]
+
+  const proc = Bun.spawn(gsArgs)
+  const statusCode = await proc.exited
+  if (statusCode === 0) {
+    return tempJpg
+  }
+  throw new Error(`failed to read .eps file: ${statusCode}`)
+}
 
 const server = serve({
   routes: {
@@ -20,26 +46,39 @@ const server = serve({
     },
     "/start": async (req: Bun.BunRequest) => {
       try {
-
         const formData = (await req.formData()).getAll("images") as File[]
         const imageContentParts = await Promise.all(
           formData.map(async file => {
-            const arrayBuffer = await file.arrayBuffer()
+            let toBeProcessed = await file.arrayBuffer()
+            if (file.type === "application/postscript") {
+              try {
+                const jpgPath = await convertEpsToJpg(file)
+                const jpgFile = Bun.file(jpgPath)
+                const tempJpg = `./temp.jpg`
+                await Bun.write(tempJpg, jpgFile)
+                toBeProcessed = await Bun.file(tempJpg).arrayBuffer()
+              } catch (e) {
+                console.log(e)
+                return {}
+              }
+            }
             return {
               inlineData: {
                 mimeType: file.type,
-                data: Buffer.from(arrayBuffer).toBase64()
+                data: Buffer.from(toBeProcessed).toBase64()
               }
             } as Part
           })
         )
+        const prompt = `You are a microstock metadata expert.
+            Analyze these ${formData.length} images in exact sequential order (from 0 to ${formData.length - 1}).
+            Generate stock metadata for each image (75-100 letter title, 30-60 words description, category, and 45-49 keywords).
+            Avoid using the words ${negativeKeywords} for the metadata. Avoid repeating words.`
         const response = await ai.models.generateContent({
           model: "gemini-3.1-flash-lite",
           contents: [
             ...imageContentParts,
-            `You are a microstock metadata expert.
-            Analyze these ${formData.length} images in exact sequential order (from 0 to ${formData.length - 1}).
-            Generate stock metadata for each image (title, description, category, and 30-40 keywords).`
+            prompt
           ],
           config: {
             responseMimeType: "application/json",

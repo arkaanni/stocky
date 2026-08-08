@@ -1,8 +1,9 @@
 import { atom, createStore } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import * as idb from "idb-keyval"
+import { categories } from "./constants"
 
-const fileListAtom = atom<FileList>()
+const fileListAtom = atom<FileList | null>()
 const isLoading = atom<boolean>(false)
 const showHistory = atom<boolean>(false)
 const saveTriggerAtom = atomWithStorage<number>("result_key", 0)
@@ -18,12 +19,17 @@ const saveGenerateResult = async (key: string, data: ImageWithMetadata): Promise
   return key
 }
 
+const clearGenerateResult = atom(null, async (_, set) => {
+  await idb.clear(resultStore)
+  set(saveTriggerAtom, () => 0)
+})
+
 const generateResultAtom = atom(async (get): Promise<ImageResult[]> => {
   get(saveTriggerAtom)
   const entries = await idb.entries(resultStore)
-  console.log(entries)
   return entries.toReversed().flatMap(([k, v]) => {
-    const previewUrl = URL.createObjectURL((v as ImageWithMetadata).file)
+    const image = v as ImageWithMetadata
+    const previewUrl = image.file.type === "application/postscript" ? null : URL.createObjectURL(v.file)
     return ({ k, ...v, previewUrl })
   })
 })
@@ -43,6 +49,7 @@ type GenerateResponse = {
 
 type ImagePreview = {
   name: string,
+  type: string,
   url: string
 }
 
@@ -54,7 +61,7 @@ type ImageWithMetadata = {
   file: Blob,
 } & GenerateResponse
 
-const updateFileListAtom = atom(null, (get, set, payload: FileList) => {
+const updateFileListAtom = atom(null, (get, set, payload: FileList | null) => {
   const currentPreviews = get(imagePreviewsAtom)
   currentPreviews.forEach(preview => {
     if (!get(retainedPreviews)?.has(preview.url)) {
@@ -63,11 +70,36 @@ const updateFileListAtom = atom(null, (get, set, payload: FileList) => {
   })
   const newPreviews = Array.from(payload ?? []).map(file => ({
     name: file.name,
-    url: URL.createObjectURL(file)
+    url: file.type === "application/postscript" ? "" : URL.createObjectURL(file),
+    type: file.type
   } as ImagePreview))
   set(fileListAtom, payload)
   set(imagePreviewsAtom, newPreviews)
 })
+
+const generateCsv = async () => {
+  const entries: ImageWithMetadata[] = (await idb.entries(resultStore)).flatMap(([k, v]) => ({ ...v }))
+  const header = "Filename,Title,Keywords,Category,Releases"
+  const rows = entries.map(image => {
+    const fileName = image.fileName
+    const title = image.title
+    const category = categories[image.category]
+    const keywords = `"${image.keywords.join(",")}"`
+    const releases = "Berta"
+    return `${fileName},${title},${keywords},${category},${releases}`
+  }).join("\n")
+  const csv = [header, rows].join("\n")
+  const blob = new Blob(['\uFEFF' + csv], { type: "text/csv;charset=utf-8;" })
+  const csvUrl = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = csvUrl
+  link.hidden = true
+  link.setAttribute("download", "metadata.csv")
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(csvUrl)
+}
 
 const uploadFiles = atom(null, async (get, set) => {
   setLoading(true)
@@ -122,7 +154,9 @@ export {
   setImagePreviews,
   updateFileListAtom,
   generateResultAtom,
-  imagePreviewsResultUrlAtom
+  imagePreviewsResultUrlAtom,
+  generateCsv,
+  clearGenerateResult
 }
 
 export type {
