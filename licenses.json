@@ -1,0 +1,367 @@
+{
+    "@google/genai@2.16.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/googleapis/js-genai",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@google\\genai",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@google\\genai\\LICENSE"
+    },
+    "@heroicons/react@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tailwindlabs/heroicons",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@heroicons\\react",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@heroicons\\react\\LICENSE"
+    },
+    "@protobufjs/aspromise@1.1.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\aspromise",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\aspromise\\LICENSE"
+    },
+    "@protobufjs/base64@1.1.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\base64",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\base64\\LICENSE"
+    },
+    "@protobufjs/codegen@2.0.5": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\codegen",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\codegen\\LICENSE"
+    },
+    "@protobufjs/eventemitter@1.1.1": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\eventemitter",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\eventemitter\\LICENSE"
+    },
+    "@protobufjs/fetch@1.1.1": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\fetch",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\fetch\\LICENSE"
+    },
+    "@protobufjs/float@1.0.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\float",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\float\\LICENSE"
+    },
+    "@protobufjs/path@1.1.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\path",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\path\\LICENSE"
+    },
+    "@protobufjs/pool@1.1.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/dcodeIO/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\pool",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\pool\\LICENSE"
+    },
+    "@protobufjs/utf8@1.1.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/protobufjs/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\utf8",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@protobufjs\\utf8\\LICENSE"
+    },
+    "@types/node@26.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@types\\node",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@types\\node\\LICENSE"
+    },
+    "@types/react@19.2.18": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@types\\react",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@types\\react\\LICENSE"
+    },
+    "@types/retry@0.12.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@types\\retry",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\@types\\retry\\LICENSE"
+    },
+    "agent-base@7.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "publisher": "Nathan Rajlich",
+        "email": "nathan@tootallnate.net",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\agent-base",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\agent-base\\LICENSE"
+    },
+    "base64-js@1.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/beatgammit/base64-js",
+        "publisher": "T. Jameson Little",
+        "email": "t.jameson.little@gmail.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\base64-js",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\base64-js\\LICENSE"
+    },
+    "bignumber.js@9.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/MikeMcl/bignumber.js",
+        "publisher": "Michael Mclaughlin",
+        "email": "M8ch88l@gmail.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\bignumber.js",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\bignumber.js\\LICENCE.md"
+    },
+    "buffer-equal-constant-time@1.0.1": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/goinstant/buffer-equal-constant-time",
+        "publisher": "GoInstant Inc., a salesforce.com company",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\buffer-equal-constant-time",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\buffer-equal-constant-time\\LICENSE.txt"
+    },
+    "csstype@3.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/frenic/csstype",
+        "publisher": "Fredrik Nicol",
+        "email": "fredrik.nicol@gmail.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\csstype",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\csstype\\LICENSE"
+    },
+    "data-uri-to-buffer@4.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/node-data-uri-to-buffer",
+        "publisher": "Nathan Rajlich",
+        "email": "nathan@tootallnate.net",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\data-uri-to-buffer",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\data-uri-to-buffer\\README.md"
+    },
+    "debug@4.4.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/debug-js/debug",
+        "publisher": "Josh Junon",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\debug",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\debug\\LICENSE"
+    },
+    "ecdsa-sig-formatter@1.0.11": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/Brightspace/node-ecdsa-sig-formatter",
+        "publisher": "D2L Corporation",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\ecdsa-sig-formatter",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\ecdsa-sig-formatter\\LICENSE"
+    },
+    "extend@3.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/justmoon/node-extend",
+        "publisher": "Stefan Thomas",
+        "email": "justmoon@members.fsf.org",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\extend",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\extend\\LICENSE"
+    },
+    "fetch-blob@3.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/node-fetch/fetch-blob",
+        "publisher": "Jimmy Wärting",
+        "email": "jimmy@warting.se",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\fetch-blob",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\fetch-blob\\LICENSE"
+    },
+    "formdata-polyfill@4.0.10": {
+        "licenses": "MIT",
+        "repository": "git+https://jimmywarting@github.com/jimmywarting/FormData",
+        "publisher": "Jimmy Wärting",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\formdata-polyfill",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\formdata-polyfill\\LICENSE"
+    },
+    "gaxios@7.3.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/googleapis/google-cloud-node",
+        "publisher": "Google, LLC",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\gaxios",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\gaxios\\LICENSE"
+    },
+    "gcp-metadata@8.1.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/googleapis/google-cloud-node-core",
+        "publisher": "Google LLC",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\gcp-metadata",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\gcp-metadata\\LICENSE"
+    },
+    "google-auth-library@10.9.1": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/googleapis/google-cloud-node",
+        "publisher": "Google Inc.",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\google-auth-library",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\google-auth-library\\LICENSE"
+    },
+    "google-logging-utils@1.1.3": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/googleapis/google-cloud-node-core",
+        "publisher": "Google API Authors",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\google-logging-utils",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\google-logging-utils\\LICENSE"
+    },
+    "https-proxy-agent@7.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "publisher": "Nathan Rajlich",
+        "email": "nathan@tootallnate.net",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\https-proxy-agent",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\https-proxy-agent\\LICENSE"
+    },
+    "idb-keyval@6.3.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/jakearchibald/idb-keyval",
+        "publisher": "Jake Archibald",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\idb-keyval",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\idb-keyval\\LICENCE"
+    },
+    "jotai@2.20.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/pmndrs/jotai",
+        "publisher": "Daishi Kato",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\jotai",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\jotai\\LICENSE"
+    },
+    "json-bigint@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sidorares/json-bigint",
+        "publisher": "Andrey Sidorov",
+        "email": "sidorares@yandex.ru",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\json-bigint",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\json-bigint\\LICENSE"
+    },
+    "jwa@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/brianloveswords/node-jwa",
+        "publisher": "Brian J. Brennan",
+        "email": "brianloveswords@gmail.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\jwa",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\jwa\\LICENSE"
+    },
+    "jws@4.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/brianloveswords/node-jws",
+        "publisher": "Brian J Brennan",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\jws",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\jws\\LICENSE"
+    },
+    "long@5.3.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/dcodeIO/long.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\long",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\long\\LICENSE"
+    },
+    "ms@2.1.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vercel/ms",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\ms",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\ms\\license.md"
+    },
+    "node-domexception@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jimmywarting/node-domexception",
+        "publisher": "Jimmy Wärting",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\node-domexception",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\node-domexception\\LICENSE"
+    },
+    "node-fetch@3.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/node-fetch/node-fetch",
+        "publisher": "David Frank",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\node-fetch",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\node-fetch\\LICENSE.md"
+    },
+    "p-retry@4.6.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sindresorhus/p-retry",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\p-retry",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\p-retry\\license"
+    },
+    "protobufjs@7.6.5": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/protobufjs/protobuf.js",
+        "publisher": "Daniel Wirtz",
+        "email": "dcode+protobufjs@dcode.io",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\protobufjs",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\protobufjs\\LICENSE"
+    },
+    "react-dom@19.2.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react/react",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\react-dom",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\react-dom\\LICENSE"
+    },
+    "react@19.2.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react/react",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\react",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\react\\LICENSE"
+    },
+    "retry@0.13.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tim-kos/node-retry",
+        "publisher": "Tim Koschützki",
+        "email": "tim@debuggable.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\retry",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\retry\\License"
+    },
+    "safe-buffer@5.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feross/safe-buffer",
+        "publisher": "Feross Aboukhadijeh",
+        "email": "feross@feross.org",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\safe-buffer",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\safe-buffer\\LICENSE"
+    },
+    "scheduler@0.27.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\scheduler",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\scheduler\\LICENSE"
+    },
+    "stocky@0.1.0": {
+        "licenses": "UNLICENSED",
+        "private": true,
+        "path": "C:\\Users\\arkaa\\code\\stocky",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\LICENSE"
+    },
+    "undici-types@8.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/undici",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\undici-types",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\undici-types\\LICENSE"
+    },
+    "web-streams-polyfill@3.3.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/MattiasBuelens/web-streams-polyfill",
+        "publisher": "Mattias Buelens",
+        "email": "mattias@buelens.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\web-streams-polyfill",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\web-streams-polyfill\\LICENSE"
+    },
+    "ws@8.21.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/websockets/ws",
+        "publisher": "Einar Otto Stangvik",
+        "email": "einaros@gmail.com",
+        "path": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\ws",
+        "licenseFile": "C:\\Users\\arkaa\\code\\stocky\\node_modules\\ws\\LICENSE"
+    }
+}

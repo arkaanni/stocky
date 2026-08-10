@@ -22,6 +22,8 @@ const categories = {
   "Travel": 21
 } as Record<string, number>
 
+const categoriesArr = Object.entries(categories).map(([k,v]) => k).join(", ")
+
 const negativeKeywords = [
   "AI", "vector", "AI-generated", "ui", "ux", "ui/ux", "design", "graphic"
 ].join(", ")
@@ -34,5 +36,6 @@ const CsvHeaders = {
 
 export {
   categories,
-  negativeKeywords
+  negativeKeywords,
+  categoriesArr
 }

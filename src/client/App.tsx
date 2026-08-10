@@ -1,6 +1,16 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { clearGenerateResult, fileListAtom, generateCsv, generateResultAtom, imagePreviewsAtom, imagePreviewsResultUrlAtom, isLoading, setFileList, setShowHistory, showHistory, store, updateFileListAtom, uploadFiles, type GenerateResponse, type ImagePreview, type ImageResult, type ImageWithMetadata } from "./store"
+import {
+  clearGenerateResult, clearGenerateResultByKey, fileListAtom, generateCsv, generateResultAtom, getResult, imagePreviewsAtom,
+  imagePreviewsResultUrlAtom, isLoading, resultKeysAtom, setShowHistory, showHistory, store, updateFileListAtom,
+  uploadFiles, type ImagePreview, type ImageResult
+} from "./store"
 import { useEffect, useState } from "react"
+import {
+  KeyIcon, PhotoIcon, TrashIcon, ArrowDownTrayIcon, ArrowUturnLeftIcon, ChevronLeftIcon,
+  ChevronRightIcon, ArrowLeftStartOnRectangleIcon, SparklesIcon, ArrowRightEndOnRectangleIcon,
+  FolderMinusIcon,
+  ArrowPathIcon
+} from "@heroicons/react/24/outline"
 
 const DirectoryInput = () => {
   const [, updateFileList] = useAtom(updateFileListAtom, { store })
@@ -21,7 +31,10 @@ const DirectoryInput = () => {
   return (
     <div className="flex flex-row gap-4">
       <div>
-        <label htmlFor="input-file" className="btn btn-dash">pilih gambar</label>
+        <label htmlFor="input-file" className="btn btn-dash flex gap-4">
+          <PhotoIcon />
+          <p className="text-sm">pilih gambar</p>
+        </label>
         <input
           id="input-file"
           type="file"
@@ -33,8 +46,13 @@ const DirectoryInput = () => {
       </div>
       <div className="flex flex-row gap-4">
         <div className="m-auto text-center items-center justify-center self-center">{fileCount} file(s)</div>
-        <div className="">
-          <button className="btn btn-error" onClick={() => handleResetBtn()}>reset</button>
+        <div className="flex flex-row">
+          <button className="btn btn-warning" onClick={() => handleResetBtn()}>
+            <div className="flex gap-2 flex-row">
+              <ArrowUturnLeftIcon width={24} />
+              <div>reset</div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -63,14 +81,21 @@ const Heading = () => {
           <DirectoryInput />
         </div>
         <div className="flex-3 flex flex-row gap-2 justify-end">
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <KeyIcon width={24} />
             <p className="text-center">{apiKey}</p>
           </div>
           <div className="divider divider-horizontal"></div>
           {loading && (<span className="loading" />)}
           <div className="flex gap-4 justify-end">
-            <button className="btn btn-secondary" disabled={(fileList?.length ?? 0) <= 0 || loading} onClick={() => generate()}>generate</button>
-            <button className="btn btn-secondary" disabled={loading} onClick={() => setShowHistory(true)}>lihat hasil</button>
+            <button className="btn btn-success" disabled={(fileList?.length ?? 0) <= 0 || loading} onClick={() => generate()}>
+              <SparklesIcon width={24} />
+              <p>generate</p>
+            </button>
+            <button className="btn btn-secondary" disabled={loading} onClick={() => setShowHistory(true)}>
+              <ArrowRightEndOnRectangleIcon width={24} />
+              <p>lihat hasil</p>
+            </button>
           </div>
         </div>
       </div>
@@ -83,7 +108,7 @@ const ImageRow = (props: ImagePreview) => {
     <div className="card bg-base-200">
       <figure className="aspect-video shrink">
         {props.type !== "application/postscript" ? (<img className="object-cover" src={props.url} />) : (
-          <div className="mask mask-b-from-primary w-full bg-secondary h-32">
+          <div className="mask mask-b-from-primary w-full h-full bg-secondary flex justify-center items-center">
             <p className="text-center">EPS</p>
           </div>
         )}
@@ -102,7 +127,7 @@ const ImageResultRow = (props: ImageResult) => {
     <div className="card card-side bg-base-200">
       <figure className="min-w-60 max-w-60 aspect-square shrink">
         {props.previewUrl !== null ? (<img className="object-cover" src={props.previewUrl} />) : (
-          <div className="mask mask-b-from-primary w-full bg-secondary h-32">
+          <div className="mask mask-b-from-primary w-full bg-secondary flex justify-center items-center">
             <p className="text-center">EPS</p>
           </div>
         )}
@@ -158,24 +183,101 @@ const Main = () => {
   )
 }
 
-const History = () => {
-  const generateResult = useAtomValue(generateResultAtom, { store })
+const DeleteConfirmation = () => {
   const clearResult = useSetAtom(clearGenerateResult)
   return (
-    <div className="absolute z-51 h-full w-full bg-base-300 flex flex-col gap-6">
-      <div className="card sticky bg-base-200 top-0 z-52 rounded-none">
-        <div className="card-body flex flex-row justify-between gap-4">
-          <div>
-            <button className="btn btn-error" disabled={generateResult.length <= 0} onClick={() => clearResult()}>hapus</button>
-          </div>
-          <div className="flex flex-row justify-end gap-4">
-            <button className="btn btn-secondary w-fit" disabled={generateResult.length <= 0} onClick={() => generateCsv()}>csv</button>
-            <button className="btn btn-secondary" onClick={() => setShowHistory(false)}>kembali</button>
-          </div>
+    <dialog id="delete_confirmation" className="modal">
+      <div className="modal-box">
+        <p className="py-4">hapus semua metadata</p>
+        <div className="modal-action">
+          <form method="dialog" className="flex gap-2">
+            <button className="btn btn-info" onClick={() => clearResult()}>yes</button>
+            <button className="btn btn-ghhost">no</button>
+          </form>
         </div>
       </div>
-      <div className="flex flex-col gap-6 p-8">
-        <ImageResultRows generateResult={generateResult} />
+    </dialog>
+  )
+}
+
+const History = () => {
+  const [page, setPage] = useState(0)
+  const resultKeys = useAtomValue(resultKeysAtom)
+  const [result, setResult] = useState<ImageResult[]>([])
+  const deleteGroup = useSetAtom(clearGenerateResultByKey)
+
+  useEffect(() => {
+    let flag = false
+    const retrieve = async () => {
+      if (!flag) {
+        if (resultKeys.length > 0) {
+          const data = await getResult(resultKeys[page]!)
+          setResult(data)
+        } else {
+          setResult([])
+        }
+      }
+    }
+    retrieve()
+    return () => {
+      flag = true
+    }
+  }, [page, resultKeys])
+
+  const handleDelete = () => {
+    const fallBackPage = page > 0 ? page - 1 : 0
+    deleteGroup(resultKeys[page])
+    setPage(fallBackPage)
+  }
+
+  return (
+    <div className="absolute z-51 h-full w-full bg-base-100 flex flex-col gap-6">
+      <div className="card sticky bg-base-300 top-0 z-52 rounded-none">
+        <div className="card-body flex flex-row justify-end gap-4">
+          <button
+            className="btn btn-warning"
+            onClick={() => (document.getElementById("delete_confirmation") as HTMLDialogElement)?.showModal()}>
+            <ArrowPathIcon width={24} />
+            <p>hapus semua</p>
+          </button>
+          <button className="btn btn-secondary" onClick={() => setShowHistory(false)}>
+            <ArrowLeftStartOnRectangleIcon width={24} />
+            <p>kembali</p>
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col gap-6 p-8">
+        <ImageResultRows generateResult={result} />
+      </div>
+      <div className="flex gap-4 sticky bottom-0 bg-base-100 p-4">
+        <div className="flex-1">
+          <button
+            className="btn btn-error"
+            disabled={result.length <= 0}
+            onClick={() => handleDelete()}>
+            <TrashIcon width={24} />
+          </button>
+          <DeleteConfirmation />
+        </div>
+        <div className="flex-1 flex justify-center gap-4">
+          <button className="btn btn-secondary w-fit" disabled={result.length === 0 || page === 0} onClick={() => setPage(page - 1)}>
+            <ChevronLeftIcon width={24} />
+          </button>
+          <button className="btn btn-secondary w-fit" disabled={result.length === 0 || page === resultKeys.length - 1} onClick={() => setPage(page + 1)}>
+            <ChevronRightIcon width={24} />
+          </button>
+          {resultKeys.length > 0 && (
+            <div className="flex flex-col justify-center items-centers">
+              {page + 1} / {resultKeys.length}
+            </div>
+          )}
+        </div>
+        <div className="flex-1 flex justify-end">
+          <button className="btn btn-primary w-fit" disabled={result.length <= 0} onClick={() => generateCsv(resultKeys[page])}>
+            <ArrowDownTrayIcon width={24} />
+            <p>csv</p>
+          </button>
+        </div>
       </div>
     </div>
   )
