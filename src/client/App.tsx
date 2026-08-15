@@ -1,25 +1,26 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import {
   clearGenerateResult, clearGenerateResultByKey, fileListAtom, generateCsv, generateResultAtom, getResult, imagePreviewsAtom,
-  imagePreviewsResultUrlAtom, isLoading, resultKeysAtom, setShowHistory, showHistory, store, updateFileListAtom,
+  imagePreviewsResultUrlAtom, isLoading, isProcessing, resultKeysAtom, setShowHistory, showHistory, store, updateFileListAtom,
   uploadFiles, type ImagePreview, type ImageResult
 } from "./store"
 import { useEffect, useState } from "react"
 import {
   KeyIcon, PhotoIcon, TrashIcon, ArrowDownTrayIcon, ArrowUturnLeftIcon, ChevronLeftIcon,
   ChevronRightIcon, ArrowLeftStartOnRectangleIcon, SparklesIcon, ArrowRightEndOnRectangleIcon,
-  FolderMinusIcon,
   ArrowPathIcon
 } from "@heroicons/react/24/outline"
 
 const DirectoryInput = () => {
   const [, updateFileList] = useAtom(updateFileListAtom, { store })
   const [fileCount, setFileCount] = useState(0)
+  const [, setLoading] = useAtom(isLoading)
   const handleInputFile = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
     const files = e.target.files
     if (files?.length ?? 0 > 0) {
+      setLoading(true)
       setFileCount(files?.length!!)
-      updateFileList(files!)
+      updateFileList(files!).then(() => setLoading(false))
     }
   }
 
@@ -62,7 +63,7 @@ const DirectoryInput = () => {
 const Heading = () => {
   const [apiKey, setApikey] = useState<string>()
   const [, uploadAtom] = useAtom(uploadFiles, { store })
-  const loading = useAtomValue(isLoading, { store })
+  const processing = useAtomValue(isProcessing, { store })
   const fileList = useAtomValue(fileListAtom, { store })
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const Heading = () => {
   }
 
   return (
-    <div className="card shadow-xs bg-base-300 rounded-none sticky top-0 z-50 h-full">
+    <div className="card shadow-xs bg-base-300 rounded-none sticky top-0 z-50 h-1/10">
       <div className="card-body flex flex-row justify-between gap-8">
         <div className="flex-4">
           <DirectoryInput />
@@ -86,13 +87,13 @@ const Heading = () => {
             <p className="text-center">{apiKey}</p>
           </div>
           <div className="divider divider-horizontal"></div>
-          {loading && (<span className="loading" />)}
+          {processing && (<span className="loading" />)}
           <div className="flex gap-4 justify-end">
-            <button className="btn btn-success" disabled={(fileList?.length ?? 0) <= 0 || loading} onClick={() => generate()}>
+            <button className="btn btn-success" disabled={(fileList?.length ?? 0) <= 0 || processing} onClick={() => generate()}>
               <SparklesIcon width={24} />
               <p>generate</p>
             </button>
-            <button className="btn btn-secondary" disabled={loading} onClick={() => setShowHistory(true)}>
+            <button className="btn btn-secondary" disabled={processing} onClick={() => setShowHistory(true)}>
               <ArrowRightEndOnRectangleIcon width={24} />
               <p>lihat hasil</p>
             </button>
@@ -149,7 +150,7 @@ const ImageResultRow = (props: ImageResult) => {
             </tr>
             <tr>
               <th>category:</th>
-              <td>{props.category}</td>
+              <td>{`${props.first_category}, ${props.second_category}`}</td>
             </tr>
             <tr>
               <th>keywords:</th>
@@ -176,7 +177,12 @@ const ImageResultRows = ({ generateResult }: { generateResult: ImageResult[] }) 
 }
 
 const Main = () => {
-  return (
+  const loading = useAtomValue(isLoading, { store })
+  return loading ? (
+    <div className="flex-1 flex flex-col justify-center items-center">
+      <span className="loading loading-bars" />
+    </div>
+  ) : (
     <div className="grid grid-cols-6 gap-8 px-16 pb-8">
       <ImageRows />
     </div>
@@ -286,7 +292,7 @@ const History = () => {
 export function App() {
   const isShowHistory = useAtomValue(showHistory, { store })
   return (
-    <div className="flex flex-col mx-auto gap-8">
+    <div className="flex flex-col mx-auto gap-8 w-full h-screen">
       <Heading />
       <Main />
       {isShowHistory && <History />}

@@ -1,10 +1,11 @@
 import { atom, createStore } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 import * as idb from "idb-keyval"
-import { categories } from "./constants"
+import { categories, shutterstockCategories } from "./constants"
 
 const fileListAtom = atom<File[]>()
 const isLoading = atom<boolean>(false)
+const isProcessing = atom<boolean>(false)
 const showHistory = atom<boolean>(false)
 const saveTriggerAtom = atomWithStorage<number>("result_key", 0)
 const imagePreviewsAtom = atom<ImagePreview[]>([])
@@ -19,7 +20,8 @@ type GenerateResponse = {
   imageIndex: number,
   title: string,
   description: string,
-  category: string,
+  first_category: string,
+  second_category: string,
   keywords: string[]
 }
 
@@ -135,7 +137,7 @@ const generateCsv = async (key?: IDBValidKey) => {
   const rows = entries.map(image => {
     const fileName = image.file.name
     const title = image.title
-    const category = categories[image.category]
+    const category = categories[image.first_category]
     const keywords = `"${image.keywords.join(",")}"`
     return `${fileName},${title},${keywords},${category},`
   }).join("\n")
@@ -145,7 +147,56 @@ const generateCsv = async (key?: IDBValidKey) => {
   const link = document.createElement("a")
   link.href = csvUrl
   link.hidden = true
-  link.setAttribute("download", "metadata.csv")
+  link.setAttribute("download", "metadata-adobestock.csv")
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(csvUrl)
+
+  // shutterstock
+  generateCsvShutterstock(entries)
+  // vecteezy
+  generateCsvVecteezy(entries)
+}
+
+const generateCsvShutterstock = (entries: ImageWithMetadata[]) => {
+  const header = "Filename,Description,Keywords,Categories,Editorial,Mature Content,Illustration"
+  const rows = entries.map(image => {
+    const fileName = image.file.name
+    const description = `"${image.description}"`
+    const keywords = `"${image.keywords.join(",")}"`
+    const category = image.second_category
+    return `${fileName},${description},${keywords},${category},no,,yes`
+  }).join("\n")
+  const csv = [header, rows].join("\n")
+  const blob = new Blob(['\uFEFF' + csv], { type: "text/csv;charset=utf-8;" })
+  const csvUrl = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = csvUrl
+  link.hidden = true
+  link.setAttribute("download", "metadata-shutterstock.csv")
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(csvUrl)
+}
+
+const generateCsvVecteezy = (entries: ImageWithMetadata[]) => {
+  const header = "Filename,Title,Description,Keywords,License,Id"
+  const rows = entries.map(image => {
+    const fileName = image.file.name
+    const title = `"${image.title}"`
+    const description = `"${image.description}"`
+    const keywords = `"${image.keywords.join(",")}"`
+    return `${fileName},${title},${description},${keywords},pro,`
+  }).join("\n")
+  const csv = [header, rows].join("\n")
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+  const csvUrl = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = csvUrl
+  link.hidden = true
+  link.setAttribute("download", "metadata-vecteezy.csv")
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -217,7 +268,8 @@ export {
   clearGenerateResult,
   resultKeysAtom,
   getResult,
-  clearGenerateResultByKey
+  clearGenerateResultByKey,
+  isProcessing
 }
 
 export type {

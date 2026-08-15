@@ -3,8 +3,8 @@ import indexDev from "../client/index.html"
 import indexPrd from "../client/index_prd.html"
 import { init } from "../util"
 import { apiKey, maskedApiKey, serverStore } from "./store"
-import { GoogleGenAI, Type, type Part } from "@google/genai"
-import { categoriesArr, negativeKeywords } from "../client/constants"
+import { GoogleGenAI, Type, type GenerateContentConfig, type Part } from "@google/genai"
+import { categoriesArr, negativeKeywords, shutterstockCategories } from "../client/constants"
 
 await init()
 
@@ -39,7 +39,79 @@ const convertEpsToPng = async (file: File) => {
   throw new Error(`failed to read .eps file: ${statusCode}`)
 }
 
+const createPrompt = (length: number, startIndex: number) =>
+  `You are a microstock metadata expert.
+    Analyze these ${length} images in exact sequential order (from 0 to ${length - 1}).
+    Generate stock metadata for each image (75-100 letter title, 30-60 words description, first category, second category, and 45-49 keywords).
+    Avoid using the words ${negativeKeywords} for the metadata. Avoid repeating words. The first category can be one of
+    these ${categoriesArr}. The second category can be one of these ${shutterstockCategories}. The imageIndex starts from ${startIndex}`
+
+const generate = async (files: File[], startIndex: number) => {
+  const imageContentParts = await Promise.all(
+    files.map(async file => {
+      let toBeProcessed = await file.arrayBuffer()
+      let mimeType = file.type
+      const data = Buffer.from(toBeProcessed).toBase64()
+
+      return {
+        inlineData: {
+          mimeType,
+          data
+        }
+      } as Part
+    })
+  )
+
+  return await ai.models.generateContent({
+    model: "gemini-3.1-flash-lite",
+    contents: [
+      ...imageContentParts,
+      createPrompt(files.length, startIndex)
+    ],
+    config: generateConfig
+  })
+}
+
+const generateConfig = {
+  responseMimeType: "application/json",
+  responseSchema: {
+    type: Type.OBJECT,
+    properties: {
+      metadata: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.OBJECT,
+          properties: {
+            imageIndex: { type: Type.INTEGER },
+            title: { type: Type.STRING },
+            description: { type: Type.STRING },
+            first_category: { type: Type.STRING },
+            second_category: { type: Type.STRING },
+            keywords: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+            },
+          },
+          required: ["imageIndex", "title", "description", "first_category", "second_category", "keywords"],
+        },
+      },
+    },
+    required: ["metadata"],
+  },
+} as GenerateContentConfig
+
+const chunkFiles = (files: File[]) => {
+  const chunked = []
+  for (let i = 0; i < files.length; i += 10) {
+    chunked.push(files.slice(i, i + 10))
+  }
+  return chunked
+}
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(() => resolve, ms))
+
 const server = serve({
+  maxRequestBodySize: 1024 * 1024 * 1024,
   routes: {
     "/*": index,
     "/key": () => {
@@ -50,61 +122,18 @@ const server = serve({
       async POST(req: Bun.BunRequest) {
         try {
           const formData = (await req.formData()).getAll("images") as File[]
-          const imageContentParts = await Promise.all(
-            formData.map(async file => {
-              let toBeProcessed = await file.arrayBuffer()
-              let mimeType = file.type
-              const data = Buffer.from(toBeProcessed).toBase64()
+          const chunked = chunkFiles(formData)
+          let startIndex = 0
+          let results = []
+          for (let i = 0; i < chunked.length; i++) {
+            const res = await generate(chunked[i]!, startIndex)
+            const parsed = JSON.parse(res.text!)
+            results.push(...parsed.metadata)
+            startIndex += 10
+            delay(1000)
+          }
 
-              return {
-                inlineData: {
-                  mimeType,
-                  data
-                }
-              } as Part
-            })
-          )
-          const prompt = `You are a microstock metadata expert.
-            Analyze these ${formData.length} images in exact sequential order (from 0 to ${formData.length - 1}).
-            Generate stock metadata for each image (75-100 letter title, 30-60 words description, category, and 45-49 keywords).
-            Avoid using the words ${negativeKeywords} for the metadata. Avoid repeating words. The categories are one of
-            these ${categoriesArr}`
-          const response = await ai.models.generateContent({
-            model: "gemini-3.1-flash-lite",
-            contents: [
-              ...imageContentParts,
-              prompt
-            ],
-            config: {
-              responseMimeType: "application/json",
-              responseSchema: {
-                type: Type.OBJECT,
-                properties: {
-                  metadata: {
-                    type: Type.ARRAY,
-                    items: {
-                      type: Type.OBJECT,
-                      properties: {
-                        imageIndex: { type: Type.INTEGER },
-                        title: { type: Type.STRING },
-                        description: { type: Type.STRING },
-                        category: { type: Type.STRING },
-                        keywords: {
-                          type: Type.ARRAY,
-                          items: { type: Type.STRING },
-                        },
-                      },
-                      required: ["imageIndex", "title", "description", "category", "keywords"],
-                    },
-                  },
-                },
-                required: ["metadata"],
-              },
-            }
-          })
-
-          const parsedResponse = JSON.parse(response.text!)
-          const result = parsedResponse.metadata.map((item: any) => ({
+          const result = results.map((item: any) => ({
             fileName: formData[item.imageIndex]?.name ?? `file_${item.imageIndex}`,
             ...item
           }))

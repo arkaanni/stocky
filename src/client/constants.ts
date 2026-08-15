@@ -22,6 +22,14 @@ const categories = {
   "Travel": 21
 } as Record<string, number>
 
+const shutterstockCategories = [
+  "Abstract", "Animals/Wildlife", "Arts", "Backgrounds/Textures", "Beauty/Fashion",
+  "Buildings/Landmarks", "Business/Finance", "Celebrities", "Education", "Food and Drink",
+  "Healthcare/Medical", "Holidays", "Industrial", "Interiors", "Miscellaneous", "Nature",
+  "Objects", "Parks/Outdoor", "People", "Religion", "Science", "Signs/Symbols",
+  "Sports/Recreation", "Technology", "Transportation", "Vintage"
+].join(", ")
+
 const categoriesArr = Object.entries(categories).map(([k,v]) => k).join(", ")
 
 const negativeKeywords = [
@@ -37,5 +45,6 @@ const CsvHeaders = {
 export {
   categories,
   negativeKeywords,
-  categoriesArr
+  categoriesArr,
+  shutterstockCategories
 }
