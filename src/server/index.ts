@@ -1,6 +1,8 @@
 import { serve } from "bun"
 import indexDev from "../client/index.html"
 import indexPrd from "../client/index_prd.html"
+import promptGen from "../client/promptgen/index.html"
+import promptGenPrd from "../client/promptgen/index_prd.html"
 import { init } from "../util"
 import { apiKey, maskedApiKey, serverStore } from "./store"
 import { GoogleGenAI, Type, type GenerateContentConfig, type Part } from "@google/genai"
@@ -9,6 +11,7 @@ import { categoriesArr, negativeKeywords, shutterstockCategories } from "../clie
 await init()
 
 const index = process.env.NODE_ENV === "dev" ? indexDev : indexPrd
+const promptGenIndex = process.env.NODE_ENV === "dev" ? promptGen : promptGenPrd
 
 const ai = new GoogleGenAI({ apiKey: serverStore.get(apiKey) })
 
@@ -49,8 +52,8 @@ const createPrompt = (length: number, startIndex: number) =>
 const generate = async (files: File[], startIndex: number) => {
   const imageContentParts = await Promise.all(
     files.map(async file => {
-      let toBeProcessed = await file.arrayBuffer()
-      let mimeType = file.type
+      const toBeProcessed = await file.arrayBuffer()
+      const mimeType = file.type
       const data = Buffer.from(toBeProcessed).toBase64()
 
       return {
@@ -114,9 +117,45 @@ const server = serve({
   maxRequestBodySize: 1024 * 1024 * 1024,
   routes: {
     "/*": index,
+    "/prompt-gen": promptGenIndex,
     "/key": () => {
       const key = serverStore.get(maskedApiKey)
       return new Response(key ? key : "api key not configured")
+    },
+    "/generate-prompt": {
+      async POST(req: Bun.BunRequest) {
+        try {
+          const formData = (await req.formData()).get("image") as File
+          const prompt = `You are an image processing expert, analyze this image and create a prompt that
+          can be used to generate similar image with 50% similarity. Don't specify brands if the objects are branded.
+          Use different color scheme if possible.
+          `
+          const data = Buffer.from(await formData.arrayBuffer()).toBase64()
+          const mimeType = formData.type
+          const imageContentParts = {
+            inlineData: {
+              mimeType,
+              data
+            }
+          } as Part
+
+          const result = await ai.models.generateContent({
+            model: "gemini-3.1-flash-lite",
+            contents: [
+              imageContentParts,
+              prompt
+            ],
+            config: {
+              responseSchema: {
+                type: Type.STRING,
+              }
+            }
+          })
+          return new Response(result.text)
+        } catch (e) {
+          return Response.error()
+        }
+      }
     },
     "/generate": {
       async POST(req: Bun.BunRequest) {

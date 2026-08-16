@@ -8,7 +8,9 @@ import { useEffect, useState } from "react"
 import {
   KeyIcon, PhotoIcon, TrashIcon, ArrowDownTrayIcon, ArrowUturnLeftIcon, ChevronLeftIcon,
   ChevronRightIcon, ArrowLeftStartOnRectangleIcon, SparklesIcon, ArrowRightEndOnRectangleIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
+  Bars3Icon,
+  ArrowUpRightIcon
 } from "@heroicons/react/24/outline"
 
 const DirectoryInput = () => {
@@ -41,7 +43,8 @@ const DirectoryInput = () => {
           type="file"
           className="file-input"
           accept=".jpg, .jpeg, .png, .eps"
-          multiple onChange={(e) => handleInputFile(e)}
+          multiple
+          onChange={(e) => handleInputFile(e)}
           hidden
         />
       </div>
@@ -54,6 +57,10 @@ const DirectoryInput = () => {
               <div>reset</div>
             </div>
           </button>
+          <a className="btn btn-ghost" href="/prompt-gen">
+            <ArrowUpRightIcon width={16} />
+            generate prompt
+          </a>
         </div>
       </div>
     </div>
@@ -96,6 +103,9 @@ const Heading = () => {
             <button className="btn btn-secondary" disabled={processing} onClick={() => setShowHistory(true)}>
               <ArrowRightEndOnRectangleIcon width={24} />
               <p>lihat hasil</p>
+            </button>
+            <button className="btn">
+              <Bars3Icon width={24} />
             </button>
           </div>
         </div>
